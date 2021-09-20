@@ -1,4 +1,6 @@
-package com.upti.poc.model;
+package com.upti.poc.model.mysql;
+
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,35 +8,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
-public class Cliente {
+public class Produto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, unique = true)
 	private Long id;
 
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, unique = true, length = 50)
 	private String nome;
 
-	@Column(nullable = false, length = 11)
-	private String numCpfCnpj;
-
-	@Column(nullable = false, length = 11)
-	private String numTelefone;
-
-	@Column(nullable = false, length = 50)
-	private String email;
-
+	@Column(nullable = false, precision = 10, scale = 2)
+	private BigDecimal valor;
 }

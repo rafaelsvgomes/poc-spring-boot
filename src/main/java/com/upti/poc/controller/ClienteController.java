@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.upti.poc.model.Cliente;
-import com.upti.poc.repository.ClienteRepository;
+import com.upti.poc.model.postgres.Cliente;
+import com.upti.poc.service.ClienteService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,12 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ClienteController {
 
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private ClienteService clienteService;
 
 	@GetMapping("/clientes")
 	public ResponseEntity<List<Cliente>> getAll() {
 		log.info("###### Rodando getClientes");
-		List<Cliente> lista = clienteRepository.findAll();
+		List<Cliente> lista = clienteService.findAll();
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,7 +41,7 @@ public class ClienteController {
 
 	@GetMapping("/clientes/{id}")
 	public ResponseEntity<Cliente> getById(@PathVariable(value = "id") Long id) {
-		Optional<Cliente> cliente = clienteRepository.findById(id);
+		Optional<Cliente> cliente = clienteService.findById(id);
 		if (cliente.isPresent()) {
 			return new ResponseEntity<Cliente>(cliente.get(), HttpStatus.OK);
 		} else {
@@ -51,14 +51,14 @@ public class ClienteController {
 
 	@PostMapping("/clientes")
 	public ResponseEntity<Cliente> save(@RequestBody @Validated Cliente cliente) {
-		return new ResponseEntity<Cliente>(clienteRepository.save(cliente), HttpStatus.CREATED);
+		return new ResponseEntity<Cliente>(clienteService.save(cliente), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/clientes/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-		Optional<Cliente> clienteAux = clienteRepository.findById(id);
+		Optional<Cliente> clienteAux = clienteService.findById(id);
 		if (clienteAux.isPresent()) {
-			clienteRepository.delete(clienteAux.get());
+			clienteService.delete(clienteAux.get());
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,10 +68,10 @@ public class ClienteController {
 	@PutMapping("/clientes/{id}")
 	public ResponseEntity<Cliente> update(@PathVariable(value = "id") Long id,
 			@RequestBody @Validated Cliente cliente) {
-		Optional<Cliente> clienteAux = clienteRepository.findById(id);
+		Optional<Cliente> clienteAux = clienteService.findById(id);
 		if (clienteAux.isPresent()) {
 			cliente.setId(id);
-			return new ResponseEntity<Cliente>(clienteRepository.save(cliente), HttpStatus.OK);
+			return new ResponseEntity<Cliente>(clienteService.save(cliente), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

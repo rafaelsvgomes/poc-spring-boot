@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.upti.poc.model.Produto;
-import com.upti.poc.repository.ProdutoRepository;
+import com.upti.poc.model.mysql.Produto;
+import com.upti.poc.service.ProdutoService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,12 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ProdutoController {
 
 	@Autowired
-	private ProdutoRepository produtoRepository;
+	private ProdutoService produtoService;
 
 	@GetMapping("/produtos")
 	public ResponseEntity<List<Produto>> getAll() {
 		log.info("###### Rodando getProdutos");
-		List<Produto> lista = produtoRepository.findAll();
+		List<Produto> lista = produtoService.findAll();
 
 		if (lista.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,7 +41,7 @@ public class ProdutoController {
 
 	@GetMapping("/produtos/{id}")
 	public ResponseEntity<Produto> getById(@PathVariable(value = "id") Long id) {
-		Optional<Produto> produto = produtoRepository.findById(id);
+		Optional<Produto> produto = produtoService.findById(id);
 		if (produto.isPresent()) {
 			return new ResponseEntity<Produto>(produto.get(), HttpStatus.OK);
 		} else {
@@ -51,14 +51,14 @@ public class ProdutoController {
 
 	@PostMapping("/produtos")
 	public ResponseEntity<Produto> save(@RequestBody @Validated Produto produto) {
-		return new ResponseEntity<Produto>(produtoRepository.save(produto), HttpStatus.CREATED);
+		return new ResponseEntity<Produto>(produtoService.save(produto), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/produtos/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-		Optional<Produto> produtoAux = produtoRepository.findById(id);
+		Optional<Produto> produtoAux = produtoService.findById(id);
 		if (produtoAux.isPresent()) {
-			produtoRepository.delete(produtoAux.get());
+			produtoService.delete(produtoAux.get());
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,10 +68,10 @@ public class ProdutoController {
 	@PutMapping("/produtos/{id}")
 	public ResponseEntity<Produto> update(@PathVariable(value = "id") Long id,
 			@RequestBody @Validated Produto produto) {
-		Optional<Produto> produtoAux = produtoRepository.findById(id);
+		Optional<Produto> produtoAux = produtoService.findById(id);
 		if (produtoAux.isPresent()) {
 			produto.setId(id);
-			return new ResponseEntity<Produto>(produtoRepository.save(produto), HttpStatus.OK);
+			return new ResponseEntity<Produto>(produtoService.save(produto), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

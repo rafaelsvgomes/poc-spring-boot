@@ -5,12 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.upti.poc.model.Produto;
-import com.upti.poc.repository.ProdutoRepository;
+import com.upti.poc.model.mysql.Produto;
+import com.upti.poc.repository.mysql.ProdutoRepository;
 
 @SpringBootTest
 class PocSpringApplicationTests {
@@ -18,7 +17,6 @@ class PocSpringApplicationTests {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
-//	@Test
 	public void testarLombokProduto() {
 
 		List<Produto> produtos = produtoRepository.findAll();
@@ -31,7 +29,7 @@ class PocSpringApplicationTests {
 
 	}
 
-	@Test
+//	@Test
 	public void testarSaveProduto() {
 		Produto produto = new Produto();
 		produto.setNome("mouse");
