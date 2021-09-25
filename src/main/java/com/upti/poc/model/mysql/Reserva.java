@@ -1,4 +1,4 @@
-package com.upti.poc.model;
+package com.upti.poc.model.mysql;
 
 import java.util.Date;
 
@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import com.upti.poc.model.mysql.Produto;
 import com.upti.poc.model.postgres.Cliente;
 
 import lombok.Getter;
